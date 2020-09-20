@@ -9,6 +9,15 @@
     },
     "array-type": false,
     "arrow-return-shorthand": true,
+    "ban-types": {
+      "options": [
+          ["Object", "Avoid using the `Object` type. Did you mean `object`?"],
+          ["Boolean", "Avoid using the `Boolean` type. Did you mean `boolean`?"],
+          ["Number", "Avoid using the `Number` type. Did you mean `number`?"],
+          ["String", "Avoid using the `String` type. Did you mean `string`?"],
+          ["Symbol", "Avoid using the `Symbol` type. Did you mean `symbol`?"]
+      ]
+  },
     "curly": true,
     "deprecation": {
       "severity": "warning"
@@ -19,13 +28,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
+      "pm",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
+      "pm",
       "kebab-case"
     ],
     "eofline": true,
@@ -70,6 +79,7 @@
     ],
     "no-non-null-assertion": true,
     "no-redundant-jsdoc": true,
+    "no-string-literal": false,
     "no-switch-case-fall-through": true,
     "no-var-requires": false,
     "object-literal-key-quotes": [
@@ -120,7 +130,8 @@
       "options": [
         "ban-keywords",
         "check-format",
-        "allow-pascal-case"
+        "allow-pascal-case",
+        "allow-leading-underscore"
       ]
     },
     "whitespace": {
