@@ -1,7 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 import { Customer } from './customer';
+
+// the custom rating validator
+function ratingRange(c: AbstractControl): { [key: string]: boolean } | null {
+  if (c.value !== null && (isNaN(c.value) || c.value < 1 || c.value > 5)) {
+    return { range: true };
+  }
+  return null;
+}
 
 @Component({
   selector: 'app-customer',
@@ -30,6 +43,7 @@ export class CustomerComponent implements OnInit {
       phone: [defaults.phone],
       email: [defaults.email, [Validators.required, Validators.email]],
       notification: [defaults.notification],
+      rating: [defaults.rating, ratingRange], // using the ratingRange custom validator fn
       sendCatalog: [defaults.sendCatalog],
       address: this.buildAddressGroup(),
     });
@@ -50,7 +64,7 @@ export class CustomerComponent implements OnInit {
 
   setNotification(notificatonType: string): void {
     const control = this.form.controls.phone;
-    if(notificatonType === 'phone'){
+    if (notificatonType === 'phone') {
       control.setValidators(Validators.required);
     } else {
       control.clearValidators();
