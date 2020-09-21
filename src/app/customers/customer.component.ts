@@ -23,6 +23,18 @@ function ratingRange(options: any): ValidatorFn {
   };
 }
 
+function emailCrossValidator(
+  group: AbstractControl
+): { [key: string]: boolean } | null {
+  const email = group.get('email');
+  const confirm = group.get('emailConfirm');
+  if (email.pristine || confirm.pristine) {
+    return null;
+  }
+  const res =email.value === confirm.value ? null : { 'match': true };
+  return res;
+}
+
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.component.html',
@@ -48,7 +60,13 @@ export class CustomerComponent implements OnInit {
         [Validators.required, Validators.maxLength(50)],
       ],
       phone: [defaults.phone],
-      email: [defaults.email, [Validators.required, Validators.email]],
+      emailGroup: this.fb.group(
+        {
+          email: [defaults.email, [Validators.required, Validators.email]],
+          emailConfirm: ['', Validators.required],
+        },
+        { validator: emailCrossValidator }
+      ),
       notification: [defaults.notification],
       rating: [defaults.rating, ratingRange({ min: 1, max: 5 })], // using the ratingRange custom validator fn
       sendCatalog: [defaults.sendCatalog],
