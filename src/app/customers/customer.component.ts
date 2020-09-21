@@ -48,6 +48,16 @@ export class CustomerComponent implements OnInit {
     return afg;
   }
 
+  setNotification(notificatonType: string): void {
+    const control = this.form.controls.phone;
+    if(notificatonType === 'phone'){
+      control.setValidators(Validators.required);
+    } else {
+      control.clearValidators();
+    }
+    control.updateValueAndValidity();
+  }
+
   save(values): void {
     // form value model doesnt correspond to customer, you can map it to it manually
     // but the course changes the model later so don't bother yet
