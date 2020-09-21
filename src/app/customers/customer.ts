@@ -3,7 +3,10 @@ export class Customer {
   constructor(
     public firstName = '',
     public lastName = '',
+    public phone = '',
     public email = '',
+    public rating = null,
+    public notification = 'email',
     public sendCatalog = false,
     public addressType = 'home',
     public street1?: string,

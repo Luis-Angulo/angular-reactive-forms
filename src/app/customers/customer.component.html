@@ -16,7 +16,9 @@
             formControlName="firstName"
             [ngClass]="{
               'is-invalid':
-                (form.get('firstName').touched || form.get('firstName').dirty) && !form.get('firstName').valid
+                (form.get('firstName').touched ||
+                  form.get('firstName').dirty) &&
+                !form.get('firstName').valid
             }"
           />
           <span class="invalid-feedback">
@@ -43,7 +45,8 @@
             formControlName="lastName"
             [ngClass]="{
               'is-invalid':
-                (form.get('lastName').touched || form.get('lastName').dirty) && !form.get('lastName').valid
+                (form.get('lastName').touched || form.get('lastName').dirty) &&
+                !form.get('lastName').valid
             }"
           />
           <span class="invalid-feedback">
@@ -58,24 +61,131 @@
       </div>
 
       <div class="form-group row mb-2">
-        <label class="col-md-2 col-form-label" for="emailId">Email</label>
+        <label class="col-md-2 col-form-label pt-0">Send Notifications</label>
+        <div class="col-md-8">
+          <div class="form-check form-check-inline">
+            <label class="form-check-label">
+              <input
+                class="form-check-input"
+                type="radio"
+                value="phone"
+                formControlName="notification"
+                (click)="setNotification('phone')"
+              />
+              Phone
+            </label>
+          </div>
+          <div class="form-check form-check-inline">
+            <label class="form-check-label">
+              <input
+                class="form-check-input"
+                type="radio"
+                value="email"
+                formControlName="notification"
+                (click)="setNotification('email')"
+              />
+              Email
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label" for="phoneId">Phone</label>
         <div class="col-md-8">
           <input
             class="form-control"
-            id="emailId"
-            type="email"
-            placeholder="Email (required)"
-            formControlName="email"
+            id="phoneId"
+            type="text"
+            placeholder="Phone"
+            formControlName="phone"
             [ngClass]="{
-              'is-invalid': (form.get('email').touched || form.get('email').dirty) && !form.get('email').valid
+              'is-invalid':
+                (form.get('phone').touched || form.get('phone').dirty) &&
+                !form.get('phone').valid
             }"
           />
           <span class="invalid-feedback">
-            <span *ngIf="form.get('email').errors?.required">
-              Please enter your email address.
+            <span *ngIf="form.get('phone').errors?.required">
+              Please enter your phone.
             </span>
-            <span *ngIf="form.get('email').errors?.email">
-              Please enter a valid email address.
+          </span>
+        </div>
+      </div>
+
+      <div formGroupName="emailGroup">
+        <div class="form-group row mb-2">
+          <label class="col-md-2 col-form-label" for="emailId">Email</label>
+          <div class="col-md-8">
+            <input
+              class="form-control"
+              id="emailId"
+              type="email"
+              placeholder="Email (required)"
+              formControlName="email"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('emailGroup').errors ||
+                  ((form.get('emailGroup.email').touched ||
+                    form.get('emailGroup.email').dirty) &&
+                    !form.get('emailGroup.email').valid)
+              }"
+            />
+            <span class="invalid-feedback">
+              <span *ngIf="form.get('emailGroup.email').errors?.required">
+                Please enter your email address.
+              </span>
+              <span *ngIf="form.get('emailGroup.email').errors?.email">
+                Please enter a valid email address.
+              </span>
+            </span>
+          </div>
+        </div>
+        <div class="form-group row mb-2">
+          <label class="col-md-2 col-form-label" for="emailConfirmId"
+            >Confirm your email</label
+          >
+          <div class="col-md-8">
+            <input
+              class="form-control"
+              id="emailConfirmId"
+              type="email"
+              placeholder="Confirm email (required)"
+              formControlName="emailConfirm"
+              [ngClass]="{
+                'is-invalid':
+                  form.get('emailGroup').errors ||
+                  ((form.get('emailGroup.emailConfirm').touched ||
+                    form.get('emailGroup.emailConfirm').dirty) &&
+                    !form.get('emailGroup.emailConfirm').valid)
+              }"
+            />
+            <span class="invalid-feedback">
+              <span *ngIf="form.get('emailGroup').errors?.match">
+                Email addresses must match
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <div class="col-md-2 col-form-label" for="ratingId">Rating</div>
+        <div class="col-md-8">
+          <input
+            class="form-control"
+            id="ratingId"
+            type="number"
+            formControlName="rating"
+            [ngClass]="{
+              'is-invalid':
+                (form.get('rating').touched || form.get('rating').dirty) &&
+                !form.get('rating').valid
+            }"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="form.get('rating').errors?.range">
+              Please rate your experience from 1 to 5.
             </span>
           </span>
         </div>
@@ -184,11 +294,7 @@
             />
           </div>
           <div class="col-md-3">
-            <select
-              class="form-control"
-              id="stateId"
-              formControlName="state"
-            >
+            <select class="form-control" id="stateId" formControlName="state">
               <option value="" disabled selected hidden>
                 Select a State...
               </option>
