@@ -3,17 +3,24 @@ import {
   AbstractControl,
   FormBuilder,
   FormGroup,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 
 import { Customer } from './customer';
 
-// the custom rating validator
-function ratingRange(c: AbstractControl): { [key: string]: boolean } | null {
-  if (c.value !== null && (isNaN(c.value) || c.value < 1 || c.value > 5)) {
-    return { range: true };
-  }
-  return null;
+// pasing params to a validator fn requires wrapping the validator in a closure that sets up the validator
+function ratingRange(options: any): ValidatorFn {
+  // the custom rating validator
+  return function (c: AbstractControl): { [key: string]: boolean } | null {
+    if (
+      c.value !== null &&
+      (isNaN(c.value) || c.value < options.min || c.value > options.max)
+    ) {
+      return { range: true };
+    }
+    return null;
+  };
 }
 
 @Component({
@@ -43,7 +50,7 @@ export class CustomerComponent implements OnInit {
       phone: [defaults.phone],
       email: [defaults.email, [Validators.required, Validators.email]],
       notification: [defaults.notification],
-      rating: [defaults.rating, ratingRange], // using the ratingRange custom validator fn
+      rating: [defaults.rating, ratingRange({ min: 1, max: 5 })], // using the ratingRange custom validator fn
       sendCatalog: [defaults.sendCatalog],
       address: this.buildAddressGroup(),
     });
