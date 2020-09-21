@@ -27,7 +27,9 @@ export class CustomerComponent implements OnInit {
         defaults.lastName,
         [Validators.required, Validators.maxLength(50)],
       ],
-      email: [defaults.email, Validators.required],
+      phone: [defaults.phone],
+      email: [defaults.email, [Validators.required, Validators.email]],
+      notification: [defaults.notification],
       sendCatalog: [defaults.sendCatalog],
       address: this.buildAddressGroup(),
     });

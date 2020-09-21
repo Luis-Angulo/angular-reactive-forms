@@ -16,7 +16,9 @@
             formControlName="firstName"
             [ngClass]="{
               'is-invalid':
-                (form.get('firstName').touched || form.get('firstName').dirty) && !form.get('firstName').valid
+                (form.get('firstName').touched ||
+                  form.get('firstName').dirty) &&
+                !form.get('firstName').valid
             }"
           />
           <span class="invalid-feedback">
@@ -43,7 +45,8 @@
             formControlName="lastName"
             [ngClass]="{
               'is-invalid':
-                (form.get('lastName').touched || form.get('lastName').dirty) && !form.get('lastName').valid
+                (form.get('lastName').touched || form.get('lastName').dirty) &&
+                !form.get('lastName').valid
             }"
           />
           <span class="invalid-feedback">
@@ -52,6 +55,57 @@
             </span>
             <span *ngIf="form.get('lastName').errors?.maxlength">
               The last name must be less than 50 characters.
+            </span>
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label pt-0">Send Notifications</label>
+        <div class="col-md-8">
+          <div class="form-check form-check-inline">
+            <label class="form-check-label">
+              <input
+                class="form-check-input"
+                type="radio"
+                value="phone"
+                formControlName="notification"
+              />
+              Phone
+            </label>
+          </div>
+          <div class="form-check form-check-inline">
+            <label class="form-check-label">
+              <input
+                class="form-check-input"
+                type="radio"
+                value="email"
+                formControlName="notification"
+              />
+              Email
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label" for="phoneId">Phone</label>
+        <div class="col-md-8">
+          <input
+            class="form-control"
+            id="phoneId"
+            type="text"
+            placeholder="Phone"
+            formControlName="phone"
+            [ngClass]="{
+              'is-invalid':
+                (form.get('phone').touched || form.get('phone').dirty) &&
+                !form.get('phone').valid
+            }"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="form.get('phone').errors?.required">
+              Please enter your phone.
             </span>
           </span>
         </div>
@@ -67,7 +121,9 @@
             placeholder="Email (required)"
             formControlName="email"
             [ngClass]="{
-              'is-invalid': (form.get('email').touched || form.get('email').dirty) && !form.get('email').valid
+              'is-invalid':
+                (form.get('email').touched || form.get('email').dirty) &&
+                !form.get('email').valid
             }"
           />
           <span class="invalid-feedback">
@@ -184,11 +240,7 @@
             />
           </div>
           <div class="col-md-3">
-            <select
-              class="form-control"
-              id="stateId"
-              formControlName="state"
-            >
+            <select class="form-control" id="stateId" formControlName="state">
               <option value="" disabled selected hidden>
                 Select a State...
               </option>
