@@ -42,6 +42,13 @@ function emailCrossValidator(
 })
 export class CustomerComponent implements OnInit {
   form: FormGroup;
+  emailMessage = ''; // the current validation message for the email field
+  // each of the keys must match an error field key (the "kind" of error)
+  // an i18ln intl object already kind of does this, so, more reason to look into implementing it
+  validationMessages = {
+    required: 'please enter your email address',
+    email: 'please enter a valid email address'
+  };
 
   constructor(private fb: FormBuilder) {}
 
@@ -74,7 +81,22 @@ export class CustomerComponent implements OnInit {
     });
     // All abstractControl subtype objs allow subscription to changes like this, neato
     f.controls.notification.valueChanges.subscribe(notifType => this.setNotification(notifType));
+
+    // TODO: make this code be able to set all valueChange and statusChange logic so that
+    // the template does not do any of this change detection
+    // problem is that focus or touch changes are NOT observable by default
+    const emailControl = f.get('emailGroup.email');
+    emailControl.valueChanges.subscribe(() => this.setMessage(emailControl));
     return f;
+  }
+
+  setMessage(c: AbstractControl): void {
+    // assume that every change in values could lead to a valid state, so empty the
+    // errors string
+    this.emailMessage = '';
+    if ((c.touched || c.dirty) && c.errors) {
+      this.emailMessage = Object.keys(c.errors).map(k => this.validationMessages[k]).join(' ');
+    }
   }
 
   buildAddressGroup(): FormGroup {

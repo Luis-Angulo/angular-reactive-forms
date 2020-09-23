@@ -122,20 +122,11 @@
               placeholder="Email (required)"
               formControlName="email"
               [ngClass]="{
-                'is-invalid':
-                  form.get('emailGroup').errors ||
-                  ((form.get('emailGroup.email').touched ||
-                    form.get('emailGroup.email').dirty) &&
-                    !form.get('emailGroup.email').valid)
+                'is-invalid': emailMessage
               }"
             />
             <span class="invalid-feedback">
-              <span *ngIf="form.get('emailGroup.email').errors?.required">
-                Please enter your email address.
-              </span>
-              <span *ngIf="form.get('emailGroup.email').errors?.email">
-                Please enter a valid email address.
-              </span>
+              {{emailMessage}}
             </span>
           </div>
         </div>
