@@ -52,7 +52,7 @@ export class CustomerComponent implements OnInit {
     email: 'please enter a valid email address',
   };
 
-  get Addresses(): FormArray{
+  get addresses(): FormArray {
     return this.form.get('addresses') as FormArray;
   }
 
@@ -98,6 +98,10 @@ export class CustomerComponent implements OnInit {
       .pipe(debounceTime(1000))
       .subscribe(() => this.setMessage(emailControl));
     return f;
+  }
+
+  addAddress(): void {
+    this.addresses.push(this.buildAddressGroup());
   }
 
   setMessage(c: AbstractControl): void {
