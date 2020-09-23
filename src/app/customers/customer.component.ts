@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
+  FormArray,
   FormBuilder,
   FormGroup,
   ValidatorFn,
@@ -51,6 +52,10 @@ export class CustomerComponent implements OnInit {
     email: 'please enter a valid email address',
   };
 
+  get addresses(): FormArray {
+    return this.form.get('addresses') as FormArray;
+  }
+
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -77,8 +82,8 @@ export class CustomerComponent implements OnInit {
       ),
       notification: [defaults.notification],
       rating: [defaults.rating, ratingRange({ min: 1, max: 5 })], // using the ratingRange custom validator fn
-      sendCatalog: [defaults.sendCatalog],
-      address: this.buildAddressGroup(),
+      sendCatalog: [true],
+      addresses: this.fb.array([this.buildAddressGroup()]),
     });
     // All abstractControl subtype objs allow subscription to changes like this, neato
     f.controls.notification.valueChanges.subscribe((notifType) =>
@@ -93,6 +98,10 @@ export class CustomerComponent implements OnInit {
       .pipe(debounceTime(1000))
       .subscribe(() => this.setMessage(emailControl));
     return f;
+  }
+
+  addAddress(): void {
+    this.addresses.push(this.buildAddressGroup());
   }
 
   setMessage(c: AbstractControl): void {
