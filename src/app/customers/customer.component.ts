@@ -72,6 +72,10 @@ export class CustomerComponent implements OnInit {
       sendCatalog: [defaults.sendCatalog],
       address: this.buildAddressGroup(),
     });
+    // All abstractControl subtype objs allow subscription to changes like this, neato
+    f.controls.notification.valueChanges.subscribe(values =>{
+      console.log(values);
+    });
     return f;
   }
 
