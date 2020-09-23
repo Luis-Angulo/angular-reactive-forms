@@ -73,9 +73,7 @@ export class CustomerComponent implements OnInit {
       address: this.buildAddressGroup(),
     });
     // All abstractControl subtype objs allow subscription to changes like this, neato
-    f.controls.notification.valueChanges.subscribe(values =>{
-      console.log(values);
-    });
+    f.controls.notification.valueChanges.subscribe(notifType => this.setNotification(notifType));
     return f;
   }
 
