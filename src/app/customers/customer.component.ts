@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 
+import { debounceTime } from 'rxjs/operators';
 import { Customer } from './customer';
 
 // pasing params to a validator fn requires wrapping the validator in a closure that sets up the validator
@@ -31,7 +32,7 @@ function emailCrossValidator(
   if (email.pristine || confirm.pristine) {
     return null;
   }
-  const res =email.value === confirm.value ? null : { 'match': true };
+  const res = email.value === confirm.value ? null : { match: true };
   return res;
 }
 
@@ -47,7 +48,7 @@ export class CustomerComponent implements OnInit {
   // an i18ln intl object already kind of does this, so, more reason to look into implementing it
   validationMessages = {
     required: 'please enter your email address',
-    email: 'please enter a valid email address'
+    email: 'please enter a valid email address',
   };
 
   constructor(private fb: FormBuilder) {}
@@ -80,13 +81,17 @@ export class CustomerComponent implements OnInit {
       address: this.buildAddressGroup(),
     });
     // All abstractControl subtype objs allow subscription to changes like this, neato
-    f.controls.notification.valueChanges.subscribe(notifType => this.setNotification(notifType));
+    f.controls.notification.valueChanges.subscribe((notifType) =>
+      this.setNotification(notifType)
+    );
 
     // TODO: make this code be able to set all valueChange and statusChange logic so that
     // the template does not do any of this change detection
     // problem is that focus or touch changes are NOT observable by default
     const emailControl = f.get('emailGroup.email');
-    emailControl.valueChanges.subscribe(() => this.setMessage(emailControl));
+    emailControl.valueChanges
+      .pipe(debounceTime(1000))
+      .subscribe(() => this.setMessage(emailControl));
     return f;
   }
 
@@ -95,7 +100,9 @@ export class CustomerComponent implements OnInit {
     // errors string
     this.emailMessage = '';
     if ((c.touched || c.dirty) && c.errors) {
-      this.emailMessage = Object.keys(c.errors).map(k => this.validationMessages[k]).join(' ');
+      this.emailMessage = Object.keys(c.errors)
+        .map((k) => this.validationMessages[k])
+        .join(' ');
     }
   }
 
